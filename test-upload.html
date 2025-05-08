@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        #log {
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            font-family: monospace;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>文件上传测试</h1>
+    
+    <div class="container">
+        <h2>选择文件上传</h2>
+        <input type="file" id="file-input" accept="image/*" multiple>
+        <button id="upload-btn" class="btn">上传文件</button>
+    </div>
+    
+    <div class="container">
+        <h2>IndexedDB 存储信息</h2>
+        <button id="check-storage-btn" class="btn">检查存储空间</button>
+        <button id="clear-db-btn" class="btn">清空数据库</button>
+    </div>
+    
+    <div id="log"></div>
+    
+    <script type="module">
+        import { dbManager } from './js/dbManager.js';
+        
+        // 日志记录函数
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('log');
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logElement.appendChild(logEntry);
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[${type}]`, message);
+        }
+        
+        // 处理文件上传
+        function handleFileUpload(files) {
+            if (!files || files.length === 0) {
+                log('没有选择文件', 'warning');
+                return;
+            }
+            
+            // 立即将FileList对象转换为数组，避免异步回调时已失效
+            const filesArray = Array.from(files);
+            
+            log(`开始处理 ${filesArray.length} 个文件...`);
+            
+            // 输出文件信息
+            filesArray.forEach((file, index) => {
+                log(`文件 ${index+1}: ${file.name}, 类型: ${file.type}, 大小: ${Math.round(file.size/1024)}KB`);
+            });
+            
+            // 检查存储空间
+            log('检查存储空间...');
+            dbManager.checkStorage()
+                .then(storageInfo => {
+                    log(`存储空间: ${(storageInfo.usage/1024/1024).toFixed(2)}MB / ${(storageInfo.quota/1024/1024).toFixed(2)}MB (${storageInfo.usedPercentage.toFixed(2)}%)`);
+                    
+                    // 处理文件
+                    const items = [];
+                    let processedCount = 0;
+                    
+                    filesArray.forEach(file => {
+                        // 检查是否是图片
+                        if (!file.type.startsWith('image/')) {
+                            log(`跳过非图片文件: ${file.name}`, 'warning');
+                            return;
+                        }
+                        
+                        log(`读取文件: ${file.name}`);
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            log(`文件读取成功: ${file.name}`);
+                            
+                            // 创建项目对象
+                            const item = {
+                                id: Date.now() + Math.floor(Math.random() * 10000),
+                                title: file.name.split('.')[0],
+                                img: e.target.result
+                            };
+                            
+                            log(`创建项目: ID=${item.id}, 标题="${item.title}"`);
+                            items.push(item);
+                            
+                            processedCount++;
+                            if (processedCount === filesArray.length) {
+                                // 所有文件已处理，保存到IndexedDB
+                                log(`所有 ${items.length} 个文件已处理，开始保存到IndexedDB...`);
+                                
+                                dbManager.saveItems(items)
+                                    .then(() => {
+                                        log(`成功保存 ${items.length} 个项目到IndexedDB`, 'success');
+                                    })
+                                    .catch(error => {
+                                        log(`保存到IndexedDB失败: ${error.message}`, 'error');
+                                    });
+                            }
+                        };
+                        
+                        reader.onerror = function() {
+                            log(`读取文件失败: ${file.name}`, 'error');
+                            processedCount++;
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    });
+                })
+                .catch(error => {
+                    log(`检查存储空间失败: ${error.message}`, 'error');
+                });
+        }
+        
+        // 初始化IndexedDB
+        log('初始化IndexedDB...');
+        dbManager.initDB()
+            .then(() => {
+                log('IndexedDB初始化成功', 'success');
+            })
+            .catch(error => {
+                log(`IndexedDB初始化失败: ${error.message}`, 'error');
+            });
+        
+        // 绑定上传按钮点击事件
+        document.getElementById('upload-btn').addEventListener('click', () => {
+            const fileInput = document.getElementById('file-input');
+            handleFileUpload(fileInput.files);
+        });
+        
+        // 绑定检查存储按钮点击事件
+        document.getElementById('check-storage-btn').addEventListener('click', () => {
+            log('检查存储空间...');
+            dbManager.checkStorage()
+                .then(storageInfo => {
+                    log(`存储空间: ${(storageInfo.usage/1024/1024).toFixed(2)}MB / ${(storageInfo.quota/1024/1024).toFixed(2)}MB (${storageInfo.usedPercentage.toFixed(2)}%)`, 'info');
+                })
+                .catch(error => {
+                    log(`检查存储空间失败: ${error.message}`, 'error');
+                });
+        });
+        
+        // 绑定清空数据库按钮点击事件
+        document.getElementById('clear-db-btn').addEventListener('click', () => {
+            if (confirm('确定要清空数据库吗？此操作不可恢复。')) {
+                log('开始清空数据库...');
+                dbManager.clearDatabase()
+                    .then(() => {
+                        log('数据库已成功清空', 'success');
+                    })
+                    .catch(error => {
+                        log(`清空数据库失败: ${error.message}`, 'error');
+                    });
+            }
+        });
+    </script>
+</body>
+</html> 

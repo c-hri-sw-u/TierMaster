@@ -1,0 +1,117 @@
+/* 确保元素可见的强制样式 */
+
+/* Tier Handle 样式 */
+.tier-handle {
+    cursor: move;
+    font-size: 20px;
+    color: #999;
+    user-select: none;
+    display: table-cell !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    text-align: center !important;
+}
+
+.tier-handle span {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 20px !important;
+    color: #999 !important;
+    cursor: move !important;
+}
+
+/* Tier Delete Button 样式 */
+.tier-delete-btn {
+    background: none;
+    border: none;
+    color: #ff3333;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+.tier-delete-btn:hover {
+    color: #ff6666;
+}
+
+.tier-delete-btn span {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #ff3333 !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+}
+
+/* Selection Info 样式 */
+.selection-info {
+    color: var(--text-color);
+    font-size: 0.9em;
+    min-width: 150px;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-left: 10px !important;
+    vertical-align: middle !important;
+    color: var(--text-color) !important;
+}
+
+/* 为JS中使用的样式添加类 */
+.forced-visible {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.forced-tier-handle {
+    display: table-cell !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    text-align: center !important;
+}
+
+.forced-tier-handle-span {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 20px !important;
+    color: #999 !important;
+    cursor: move !important;
+}
+
+.forced-tier-delete-btn {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+.forced-tier-delete-span {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #ff3333 !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+}
+
+.forced-selection-info {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-left: 10px !important;
+    vertical-align: middle !important;
+    min-width: 150px !important;
+    color: var(--text-color) !important;
+} 

@@ -1,0 +1,94 @@
+:root {
+    --dark-bg: #222;
+    --dark-bg-secondary: #333;
+    --text-color: #fff;
+    --text-color-secondary: #aaa;
+    --border-color: #444;
+    --highlight-color: #ff69b4;
+    --error-color: #ff6b6b;
+    --error-color-dark: #ff0000;
+    --success-color: #4CAF50;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+}
+
+.social-icon, .lang-icon {
+    font-style: normal; /* 添加这一行来防止斜体 */
+}
+
+.btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.btn-primary {
+    background-color: var(--error-color-dark);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: white;
+    border: 1px solid var(--border-color);
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: 300px;
+    background-color: rgba(0,0,0,0.8);
+    color: var(--text-color);
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.highlight-animation {
+    animation: highlight-pulse 2s ease-in-out;
+}
+
+@keyframes highlight-pulse {
+    0% { color: var(--text-color); }
+    50% { color: var(--error-color-dark); }
+    100% { color: var(--text-color); }
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .item-preview {
+        width: 100%;
+        order: -1;
+    }
+} 

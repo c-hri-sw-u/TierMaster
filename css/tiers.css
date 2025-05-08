@@ -1,0 +1,150 @@
+.tier-list-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: var(--dark-bg-secondary);
+    width: 100%;
+    height: 100%;
+}
+
+.tier-row {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    height: 100%;
+    min-height: 80px;
+}
+
+.tier-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    min-height: 100%;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.tier-percent {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.tier-content {
+    flex: 1;
+    min-height: 80px;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    min-height: 40px;
+    background: rgba(0,0,0,0.01);
+    position: relative;
+}
+
+.tier-colors {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.color-box {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Tier settings styles */
+.tier-settings-table td, .tier-settings-table th {
+    padding: 8px;
+    border-bottom: 1px solid var(--dark-bg-secondary);
+}
+
+.tier-settings-table tr:hover {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.tier-color-preview {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.tier-handle {
+    cursor: move;
+    opacity: 0.5;
+}
+
+.tier-handle:hover {
+    opacity: 1;
+}
+
+.tier-input {
+    background: var(--dark-bg-secondary);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 3px 6px;
+    width: 100%;
+}
+
+.tier-limit-input {
+    background: var(--dark-bg-secondary);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 3px 6px;
+    width: 60px;
+}
+
+.tier-delete-btn {
+    background: transparent;
+    color: var(--error-color);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.tier-delete-btn:hover {
+    color: var(--error-color-dark);
+}
+
+/* Drag and drop styles */
+.drop-indicator {
+    position: absolute;
+    width: 4px;
+    background-color: var(--text-color);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    display: none;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.drop-area-indicator {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 2px dashed var(--text-color);
+    border-radius: 4px;
+    z-index: 100;
+    pointer-events: none;
+    display: none;
+}
+
+.drag-ghost {
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 1000;
+    position: absolute;
+    transform: scale(0.95);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+} 
